@@ -67,7 +67,10 @@ ConfigBird configBird;
 
 String[] hashTags;
 String[] users;
+
 int twitterKey;
+
+//KEEP THAT NAME (tweetList)! 
 ArrayList<TweetObject> tweetList = new ArrayList<TweetObject>();
 
 
@@ -76,17 +79,17 @@ public void setup() {
   initConfig();
   modelBird = new ModelTwitter(twitterKey);
   modelBird.listenToHashtag(hashTags);
+  modelBird.getAutoTweets();
 }
 
 public void draw() {
-  for (int i = tweetList.size()-1; i >= 0; i--) {
-    TweetObject tweet = tweetList.get(i);
-    println(tweet.getUsername());
-    println(tweet.getId());
-    println(tweet.getMessage());
-    println(tweet.getImageUrl());
-
-  }
+  // for (int i = tweetList.size()-1; i >= 0; i--) {
+  //   TweetObject tweet = tweetList.get(i);
+  //   println(tweet.getUsername());
+  //   println(tweet.getId());
+  //   println(tweet.getMessage());
+  //   println(tweet.getImageUrl());
+  // }
 }
 
 public void initConfig() {
@@ -210,6 +213,7 @@ public class ModelTwitter {
   //cl\u00e9s twitter
   processing.data.JSONArray  twitterKeySet; 
   processing.data.JSONObject twitterKeys = new processing.data.JSONObject(); 
+  processing.data.JSONArray autoTweetFile  = new processing.data.JSONArray(); 
 
   //--------------------------------------
   //  CONSTRUCTOR
@@ -227,7 +231,6 @@ public class ModelTwitter {
   }
 
   //----- FIN DE GETTERS AND SETTERS
-
   // CONFIGURATION
   private void twitterConfiguration(int _twitterKey){
       ConfigurationBuilder cb = new ConfigurationBuilder();
@@ -323,6 +326,22 @@ public class ModelTwitter {
       }catch (TwitterException te){
           System.out.println("Error: "+ te.getMessage()); 
       }
+  }
+
+  public String[] getAutoTweets(){
+    String[] autoTweet = {"",""};
+    autoTweetFile = loadJSONArray("autoTweets.json");
+    int rand = PApplet.parseInt(random(1, autoTweetFile.size()));
+
+    for (int i = 0; i < autoTweetFile.size(); i++) {
+      if(i == rand){
+        processing.data.JSONObject tweet = autoTweetFile.getJSONObject(i); 
+        autoTweet[0] = tweet.getString("userName");
+        autoTweet[1] = tweet.getString("message");
+        println(autoTweet[0] + ", " + autoTweet[1]);
+       }
+    }
+    return autoTweet;
   }
 
 }

@@ -14,6 +14,7 @@ public class ModelTwitter {
   //clés twitter
   processing.data.JSONArray  twitterKeySet; 
   processing.data.JSONObject twitterKeys = new processing.data.JSONObject(); 
+  processing.data.JSONArray autoTweetFile  = new processing.data.JSONArray(); 
 
   //--------------------------------------
   //  CONSTRUCTOR
@@ -31,7 +32,6 @@ public class ModelTwitter {
   }
 
   //----- FIN DE GETTERS AND SETTERS
-
   // CONFIGURATION
   private void twitterConfiguration(int _twitterKey){
       ConfigurationBuilder cb = new ConfigurationBuilder();
@@ -127,6 +127,22 @@ public class ModelTwitter {
       }catch (TwitterException te){
           System.out.println("Error: "+ te.getMessage()); 
       }
+  }
+
+  public String[] getAutoTweets(){
+    String[] autoTweet = {"",""};
+    autoTweetFile = loadJSONArray("autoTweets.json");
+    int rand = int(random(1, autoTweetFile.size()));
+
+    for (int i = 0; i < autoTweetFile.size(); i++) {
+      if(i == rand){
+        processing.data.JSONObject tweet = autoTweetFile.getJSONObject(i); 
+        autoTweet[0] = tweet.getString("userName");
+        autoTweet[1] = tweet.getString("message");
+        println(autoTweet[0] + ", " + autoTweet[1]);
+       }
+    }
+    return autoTweet;
   }
 
 }

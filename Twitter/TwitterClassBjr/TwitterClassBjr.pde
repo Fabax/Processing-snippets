@@ -21,6 +21,7 @@ ConfigBird configBird;
 
 String[] hashTags;
 String[] users;
+
 int twitterKey;
 
 //KEEP THAT NAME (tweetList)! 
@@ -32,17 +33,17 @@ void setup() {
   initConfig();
   modelBird = new ModelTwitter(twitterKey);
   modelBird.listenToHashtag(hashTags);
+  modelBird.getAutoTweets();
 }
 
 void draw() {
-  for (int i = tweetList.size()-1; i >= 0; i--) {
-    TweetObject tweet = tweetList.get(i);
-    println(tweet.getUsername());
-    println(tweet.getId());
-    println(tweet.getMessage());
-    println(tweet.getImageUrl());
-
-  }
+  // for (int i = tweetList.size()-1; i >= 0; i--) {
+  //   TweetObject tweet = tweetList.get(i);
+  //   println(tweet.getUsername());
+  //   println(tweet.getId());
+  //   println(tweet.getMessage());
+  //   println(tweet.getImageUrl());
+  // }
 }
 
 void initConfig() {
