@@ -21,28 +21,33 @@ ConfigBird configBird;
 
 String[] hashTags;
 String[] users;
-String tweetsAutomatics;
 int twitterKey;
-int w, h;
+
+//KEEP THAT NAME (tweetList)! 
+ArrayList<TweetObject> tweetList = new ArrayList<TweetObject>();
 
 
 void setup() {
   configBird = new ConfigBird("configBird.json");
   initConfig();
-  size(w, h, P3D);
   modelBird = new ModelTwitter(twitterKey);
   modelBird.listenToHashtag(hashTags);
 }
 
 void draw() {
-  
+  for (int i = tweetList.size()-1; i >= 0; i--) {
+    TweetObject tweet = tweetList.get(i);
+    println(tweet.getUsername());
+    println(tweet.getId());
+    println(tweet.getMessage());
+    println(tweet.getImageUrl());
+
+  }
 }
 
 void initConfig() {
   hashTags = configBird.jsonArrayToStringArray("hashtags");
   users = configBird.jsonArrayToStringArray("users");
   twitterKey = configBird.getInt("twitterKey");
-  w = configBird.getInt("width");
-  h = configBird.getInt("height");
 }
 

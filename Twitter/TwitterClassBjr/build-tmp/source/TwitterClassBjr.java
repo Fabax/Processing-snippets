@@ -67,29 +67,32 @@ ConfigBird configBird;
 
 String[] hashTags;
 String[] users;
-String tweetsAutomatics;
 int twitterKey;
-int w, h;
+ArrayList<TweetObject> tweetList = new ArrayList<TweetObject>();
 
 
 public void setup() {
   configBird = new ConfigBird("configBird.json");
   initConfig();
-  size(w, h, P3D);
   modelBird = new ModelTwitter(twitterKey);
   modelBird.listenToHashtag(hashTags);
 }
 
 public void draw() {
-  
+  for (int i = tweetList.size()-1; i >= 0; i--) {
+    TweetObject tweet = tweetList.get(i);
+    println(tweet.getUsername());
+    println(tweet.getId());
+    println(tweet.getMessage());
+    println(tweet.getImageUrl());
+
+  }
 }
 
 public void initConfig() {
   hashTags = configBird.jsonArrayToStringArray("hashtags");
   users = configBird.jsonArrayToStringArray("users");
   twitterKey = configBird.getInt("twitterKey");
-  w = configBird.getInt("width");
-  h = configBird.getInt("height");
 }
 
 public class ConfigBird 
@@ -323,7 +326,45 @@ public class ModelTwitter {
   }
 
 }
+public class TweetObject {
 
+public String userName; 
+public String message; 
+public String id; 
+public String imageUrl; 
+
+  public TweetObject (String _userName, String _message,String _id, String _imageUrl) {
+    userName = _userName;
+    message = _message;
+    id = _id;
+    imageUrl = _imageUrl;
+  }
+
+  public void display(){
+    println(this.userName);
+    println(this.message);
+    println(this.id);
+    println(this.imageUrl);
+  }
+
+  // getters
+  public String getUsername() {
+    return userName;
+  }
+
+   public String getMessage() {
+    return message;
+  }
+
+   public String getId() {
+    return id;
+  }
+
+   public String getImageUrl() {
+    return imageUrl;
+  }
+
+}
 public class TwitterListener implements StatusListener{
   // onStatus : nouveau message qui vient d'arriver 
   
@@ -337,10 +378,6 @@ public class TwitterListener implements StatusListener{
   public TwitterListener(boolean _isFilterOn,String _filterName ,int _time){
     filtre = new Filtre(_filterName);
     isFilterOn = _isFilterOn;
-    if(isFilterOn == true){
-
-    }
-   
     tweets =  new processing.data.JSONArray();
     counter = 0;
   }
@@ -351,7 +388,6 @@ public class TwitterListener implements StatusListener{
     userId = Long.toString(status.getUser().getId());
     messageTweet = status.getText();
     imageUrl = status.getUser().getProfileImageURL();
-
   
     if(isFilterOn){
       filerTweet();
@@ -364,15 +400,7 @@ public class TwitterListener implements StatusListener{
     processing.data.JSONObject tweetInfos =  new processing.data.JSONObject();
     processing.data.JSONObject tweetId =  new processing.data.JSONObject();
 
-    tweetInfos.setString("userName",_user);
-    tweetInfos.setString("message",_message);
-    tweetInfos.setString("id",_id);
-    tweetInfos.setString("imageUrl",_imageUrl);
-
-    tweets.setJSONObject(counter, tweetInfos);
-    println("messageTweet: "+tweets);
-    counter ++;
-     
+    tweetList.add(new TweetObject(_user,_message,_id,_imageUrl));
   }
 
   public void filerTweet(){
