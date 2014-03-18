@@ -78,19 +78,18 @@ public void setup() {
   configBird = new ConfigBird("configBird.json");
   initConfig();
   modelBird = new ModelTwitter(twitterKey);
-  modelBird.start();
-  modelBird.listenToHashtag(hashTags);
-  modelBird.getAutoTweets();
+  // modelBird.listenToHashtag(hashTags);
+  // modelBird.getAutoTweets();
 }
 
 public void draw() {
-  for (int i = tweetList.size()-1; i >= 0; i--) {
-    TweetObject tweet = tweetList.get(i);
-    println(tweet.getUsername());
-    println(tweet.getId());
-    println(tweet.getMessage());
-    println(tweet.getImageUrl());
-  }
+  // for (int i = tweetList.size()-1; i >= 0; i--) {
+  //   TweetObject tweet = tweetList.get(i);
+  //   println(tweet.getUsername());
+  //   println(tweet.getId());
+  //   println(tweet.getMessage());
+  //   println(tweet.getImageUrl());
+  // }
 }
 
 public void initConfig() {
@@ -99,7 +98,13 @@ public void initConfig() {
   twitterKey = configBird.getInt("twitterKey");
 }
 
-public class ModelTwitter extends Thread{
+public void keyPressed(){
+    if(key == 't' || key =='T'){
+        modelBird.sendTweetWithMedia("Les experimentations recommencent", "/Users/Fabax/Pro/Processing/Processing-snippets/Twitter/TwitterClassBjr2/data/nbd.jpg");
+    }
+}
+
+public class ModelTwitter {
   //configuration de twitter
   Twitter twitter;
   User user;
@@ -131,10 +136,6 @@ public class ModelTwitter extends Thread{
     //configuration of the time tweets get sent to the controller 
   }
 
-  public void start () {
-    println("Starting thread (will execute every "); 
-    super.start();
-  }
   //----- FIN DE GETTERS AND SETTERS
   // CONFIGURATION
   private void twitterConfiguration(int _twitterKey){
@@ -163,6 +164,34 @@ public class ModelTwitter extends Thread{
          // On d\u00e9marre la recherche !
         ts.filter(filterQuery);  
   }  
+
+  public void sendTweet(String _message){
+    try {
+        Status status = twitter.updateStatus(_message);
+    }catch (TwitterException te){
+        System.out.println("Error: "+ te.getMessage()); 
+    }
+
+  }
+  public void sendTweetWithMedia(String _message, String _imageUrl){
+     try {
+        StatusUpdate status = new StatusUpdate(_message);
+        status.setMedia(new File(_imageUrl));// BY SPECIFYING FILE PATH
+        Status updateStatus = twitter.updateStatus(status);
+      }catch (TwitterException te){
+        System.out.println("Error: "+ te.getMessage()); 
+      }
+  }
+
+  public void directMessage(String _reveiver ,String _directMessage){
+    try {
+        twitter.sendDirectMessage(_reveiver,_directMessage);
+        println("Direct message sent");
+    }catch (TwitterException te){
+        System.out.println("Error: "+ te.getMessage()); 
+    }
+}
+
   // USER INFOS -----------------
   //get the user informations
   public void getUserInformations(String[] _users) {

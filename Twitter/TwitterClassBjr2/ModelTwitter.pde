@@ -1,4 +1,4 @@
-public class ModelTwitter extends Thread{
+public class ModelTwitter {
   //configuration de twitter
   Twitter twitter;
   User user;
@@ -30,10 +30,6 @@ public class ModelTwitter extends Thread{
     //configuration of the time tweets get sent to the controller 
   }
 
-  void start () {
-    println("Starting thread"); 
-    super.start();
-  }
   //----- FIN DE GETTERS AND SETTERS
   // CONFIGURATION
   private void twitterConfiguration(int _twitterKey){
@@ -62,6 +58,34 @@ public class ModelTwitter extends Thread{
          // On démarre la recherche !
         ts.filter(filterQuery);  
   }  
+
+  public void sendTweet(String _message){
+    try {
+        Status status = twitter.updateStatus(_message);
+    }catch (TwitterException te){
+        System.out.println("Error: "+ te.getMessage()); 
+    }
+
+  }
+  public void sendTweetWithMedia(String _message, String _imageUrl){
+     try {
+        StatusUpdate status = new StatusUpdate(_message);
+        status.setMedia(new File(_imageUrl));// BY SPECIFYING FILE PATH
+        Status updateStatus = twitter.updateStatus(status);
+      }catch (TwitterException te){
+        System.out.println("Error: "+ te.getMessage()); 
+      }
+  }
+
+  public void directMessage(String _reveiver ,String _directMessage){
+    try {
+        twitter.sendDirectMessage(_reveiver,_directMessage);
+        println("Direct message sent");
+    }catch (TwitterException te){
+        System.out.println("Error: "+ te.getMessage()); 
+    }
+}
+
   // USER INFOS -----------------
   //get the user informations
   public void getUserInformations(String[] _users) {

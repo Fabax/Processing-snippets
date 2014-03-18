@@ -32,24 +32,29 @@ void setup() {
   configBird = new ConfigBird("configBird.json");
   initConfig();
   modelBird = new ModelTwitter(twitterKey);
-  modelBird.start();
-  modelBird.listenToHashtag(hashTags);
-  modelBird.getAutoTweets();
+  // modelBird.listenToHashtag(hashTags);
+  // modelBird.getAutoTweets();
 }
 
 void draw() {
-  for (int i = tweetList.size()-1; i >= 0; i--) {
-    TweetObject tweet = tweetList.get(i);
-    println(tweet.getUsername());
-    println(tweet.getId());
-    println(tweet.getMessage());
-    println(tweet.getImageUrl());
-  }
+  // for (int i = tweetList.size()-1; i >= 0; i--) {
+  //   TweetObject tweet = tweetList.get(i);
+  //   println(tweet.getUsername());
+  //   println(tweet.getId());
+  //   println(tweet.getMessage());
+  //   println(tweet.getImageUrl());
+  // }
 }
 
 void initConfig() {
   hashTags = configBird.jsonArrayToStringArray("hashtags");
   users = configBird.jsonArrayToStringArray("users");
   twitterKey = configBird.getInt("twitterKey");
+}
+
+void keyPressed(){
+    if(key == 't' || key =='T'){
+        modelBird.sendTweetWithMedia("Les experimentations recommencent", "/Users/Fabax/Pro/Processing/Processing-snippets/Twitter/TwitterClassBjr2/data/nbd.jpg");
+    }
 }
 
