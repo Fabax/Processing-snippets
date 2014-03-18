@@ -41,7 +41,7 @@ import java.io.InputStream;
 import java.io.OutputStream; 
 import java.io.IOException; 
 
-public class TwitterSend extends PApplet {
+public class TwitterSend2 extends PApplet {
 
 /*
  * ----------------------------------------------------------------------------
@@ -81,8 +81,12 @@ public void draw(){
 
 public void tweet(String _tweetMessage){
     try {
-        Status status = twitter.updateStatus(_tweetMessage);
-        println("Status updated to [" + status.getText() + "].");
+        StatusUpdate status = new StatusUpdate(tweetMessage);
+        status.setMedia(new File("/Users/Fabax/Pro/Processing/Processing-snippets/Twitter/TwitterSend2/data/nbd.jpg"));// BY SPECIFYING FILE PATH
+        //status.setMedia("File name", new FileInputStream("")); // By InputStream
+        Status updateStatus = twitter.updateStatus(status);
+        // Status status = twitter.updateStatus(_tweetMessage);
+        // println("Status updated to [" + status.getText() + "].");
     }catch (TwitterException te){
         System.out.println("Error: "+ te.getMessage()); 
     }
@@ -118,7 +122,7 @@ public void twitterConfiguration(){
     twitter = tf.getInstance();
 }
   static public void main(String[] passedArgs) {
-    String[] appletArgs = new String[] { "TwitterSend" };
+    String[] appletArgs = new String[] { "TwitterSend2" };
     if (passedArgs != null) {
       PApplet.main(concat(appletArgs, passedArgs));
     } else {

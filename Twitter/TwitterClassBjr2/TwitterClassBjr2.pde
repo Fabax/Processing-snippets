@@ -32,6 +32,7 @@ void setup() {
   configBird = new ConfigBird("configBird.json");
   initConfig();
   modelBird = new ModelTwitter(twitterKey);
+  modelBird.start();
   modelBird.listenToHashtag(hashTags);
   modelBird.getAutoTweets();
 }

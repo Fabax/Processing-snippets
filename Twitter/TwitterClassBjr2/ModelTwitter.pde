@@ -1,4 +1,4 @@
-public class ModelTwitter {
+public class ModelTwitter extends Thread{
   //configuration de twitter
   Twitter twitter;
   User user;
@@ -15,7 +15,6 @@ public class ModelTwitter {
   processing.data.JSONArray  twitterKeySet; 
   processing.data.JSONObject twitterKeys = new processing.data.JSONObject(); 
   processing.data.JSONArray autoTweetFile  = new processing.data.JSONArray(); 
-
   //--------------------------------------
   //  CONSTRUCTOR
   //--------------------------------------
@@ -29,6 +28,11 @@ public class ModelTwitter {
       filterName = configBird.getString("filter");
     }
     //configuration of the time tweets get sent to the controller 
+  }
+
+  void start () {
+    println("Starting thread"); 
+    super.start();
   }
   //----- FIN DE GETTERS AND SETTERS
   // CONFIGURATION

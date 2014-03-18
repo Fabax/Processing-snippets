@@ -1,0 +1,10 @@
+{
+    "autotweetsFile" : "autoTweets.json",
+    "enableAutoTweets" : true,
+    "twitterKey": 0,
+    "enableFilter":true,
+    "filter":"insultes.txt",
+    "hashtags":["porn"],
+    "users" : ["@Doctor", "@condensed", "@BonjourLab"],
+    "userImage":false,
+}

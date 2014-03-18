@@ -78,18 +78,19 @@ public void setup() {
   configBird = new ConfigBird("configBird.json");
   initConfig();
   modelBird = new ModelTwitter(twitterKey);
+  modelBird.start();
   modelBird.listenToHashtag(hashTags);
   modelBird.getAutoTweets();
 }
 
 public void draw() {
-  // for (int i = tweetList.size()-1; i >= 0; i--) {
-  //   TweetObject tweet = tweetList.get(i);
-  //   println(tweet.getUsername());
-  //   println(tweet.getId());
-  //   println(tweet.getMessage());
-  //   println(tweet.getImageUrl());
-  // }
+  for (int i = tweetList.size()-1; i >= 0; i--) {
+    TweetObject tweet = tweetList.get(i);
+    println(tweet.getUsername());
+    println(tweet.getId());
+    println(tweet.getMessage());
+    println(tweet.getImageUrl());
+  }
 }
 
 public void initConfig() {
@@ -98,7 +99,7 @@ public void initConfig() {
   twitterKey = configBird.getInt("twitterKey");
 }
 
-public class ModelTwitter {
+public class ModelTwitter extends Thread{
   //configuration de twitter
   Twitter twitter;
   User user;
@@ -115,7 +116,6 @@ public class ModelTwitter {
   processing.data.JSONArray  twitterKeySet; 
   processing.data.JSONObject twitterKeys = new processing.data.JSONObject(); 
   processing.data.JSONArray autoTweetFile  = new processing.data.JSONArray(); 
-
   //--------------------------------------
   //  CONSTRUCTOR
   //--------------------------------------
@@ -131,6 +131,10 @@ public class ModelTwitter {
     //configuration of the time tweets get sent to the controller 
   }
 
+  public void start () {
+    println("Starting thread (will execute every "); 
+    super.start();
+  }
   //----- FIN DE GETTERS AND SETTERS
   // CONFIGURATION
   private void twitterConfiguration(int _twitterKey){
@@ -149,7 +153,6 @@ public class ModelTwitter {
       TwitterFactory tf = new TwitterFactory(c);
       twitter = tf.getInstance();
   }
-
   //Methode that will listen to a specifique hashtag and will return the result in live
   public void listenToHashtag(String[] _keyWords){
         TwitterStream ts = new TwitterStreamFactory(c).getInstance();
@@ -161,7 +164,6 @@ public class ModelTwitter {
         ts.filter(filterQuery);  
   }  
   // USER INFOS -----------------
-
   //get the user informations
   public void getUserInformations(String[] _users) {
     String[] userList = _users;
@@ -175,7 +177,6 @@ public class ModelTwitter {
       }
     }
   }
-
   //display the user information (for debug)
   public void displayUserInformations() {
     println("getLocation(): "+user.getLocation());
@@ -186,7 +187,6 @@ public class ModelTwitter {
     println("getDescriptionURLEntities(): "+user.getDescriptionURLEntities());
     println("getFavouritesCount() : "+user.getFavouritesCount() );
   }// END OF USER INFOS -----------------
-
   //SEARCH TWEETS --------------
   public void searchTweets(String _search, int _numberOfResults){
     try {
@@ -199,7 +199,6 @@ public class ModelTwitter {
         exit();
     } 
   }
-
   public void displaySearchedTweets(int _numberOfResults){
     for (int i = 0; i<_numberOfResults; i++){
         status = tweets.get(i);
@@ -218,7 +217,6 @@ public class ModelTwitter {
         
     }
   }//END OF SEARCH TWEETS --------------
-
   // envoi un tweet \u00e0 un utilisateur
   public void mention(String _tweetMessage){
       try {
@@ -228,7 +226,6 @@ public class ModelTwitter {
           System.out.println("Error: "+ te.getMessage()); 
       }
   }
-
   public String[] getAutoTweets(){
     String[] autoTweet = {"",""};
     autoTweetFile = loadJSONArray("autoTweets.json");
@@ -244,19 +241,17 @@ public class ModelTwitter {
     }
     return autoTweet;
   }
-
 }
-
 
 ///--------------------------------------------------------------------------
 ///--------------------------------------------------------------------------
 ///--------------------------------------------------------------------------
 public class TweetObject {
 
-public String userName; 
-public String message; 
-public String id; 
-public String imageUrl; 
+  public String userName; 
+  public String message; 
+  public String id; 
+  public String imageUrl; 
 
   public TweetObject (String _userName, String _message,String _id, String _imageUrl) {
     userName = _userName;
@@ -288,14 +283,11 @@ public String imageUrl;
    public String getImageUrl() {
     return imageUrl;
   }
-
 }
-
 ///--------------------------------------------------------------------------
 ///--------------------------------------------------------------------------
 ///--------------------------------------------------------------------------
-public class ConfigBird 
-{
+public class ConfigBird {
   
   processing.data.JSONObject allConfigs;
   
@@ -354,13 +346,11 @@ public class ConfigBird
     }
     return stringToReturn;
   }
-
 }
 ///--------------------------------------------------------------------------
 ///--------------------------------------------------------------------------
 ///--------------------------------------------------------------------------
-public class Filtre
-{ 
+public class Filtre{ 
   String fichierMots;
   String lines[];
   int csvWidth;
@@ -472,9 +462,6 @@ public class TwitterListener implements StatusListener{
     ex.printStackTrace();
   }
 }
-
-
-
 ///--------------------------------------------------------------------------
 ///--------------------------------------------------------------------------
 ///--------------------------------------------------------------------------

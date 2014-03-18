@@ -31,13 +31,14 @@ void setup(){
     twitterConfiguration();
 }
 
-void draw(){
-}
-
 void tweet(String _tweetMessage){
     try {
-        Status status = twitter.updateStatus(_tweetMessage);
-        println("Status updated to [" + status.getText() + "].");
+        StatusUpdate status = new StatusUpdate(tweetMessage);
+        status.setMedia(new File("/Users/Fabax/Pro/Processing/Processing-snippets/Twitter/TwitterSend2/data/nbd.jpg"));// BY SPECIFYING FILE PATH
+        //status.setMedia("File name", new FileInputStream("")); // By InputStream
+        Status updateStatus = twitter.updateStatus(status);
+        // Status status = twitter.updateStatus(_tweetMessage);
+        // println("Status updated to [" + status.getText() + "].");
     }catch (TwitterException te){
         System.out.println("Error: "+ te.getMessage()); 
     }
@@ -52,16 +53,6 @@ void directMessage(String _reveiver ,String _directMessage){
     }
 }
 
-void keyPressed(){
-    if(key == 't' || key =='T'){
-        tweet(tweetMessage);
-    }
-
-    if(key == 'd' || key =='D'){
-        directMessage(reveiver,directMessage);
-    }
-
-}
 
 void twitterConfiguration(){
     ConfigurationBuilder cb = new ConfigurationBuilder();
